@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f580be4fc3d5f297c83de31ecafe07be, type: 3}
+  m_Name: MinerAnimations
+  m_EditorClassIdentifier: 
+  skeleton: {fileID: 11400000, guid: cecc537677935cd3297ff50757261bca, type: 2}
+  filter: 
+  animations:
+  - Damage
+  - Miner_1
+  - DoubleShift
+  - PickaxeCharge
