@@ -250,6 +250,8 @@ MonoBehaviour:
   type: 1
   ability: {fileID: 11400000, guid: dd702fb22b9d3194d9dc79891d3e5e9c, type: 2}
   gameManager: {fileID: 0}
+  activeColor: {r: 0.19215687, g: 0.28235295, b: 0.3647059, a: 1}
+  selectedColor: {r: 0.754717, g: 0.6789131, b: 0.046279836, a: 1}
 --- !u!114 &-8301474531355930599
 MonoBehaviour:
   m_ObjectHideFlags: 0

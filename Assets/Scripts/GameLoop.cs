@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -18,6 +19,10 @@ namespace UnfrozenTest
         private Character currentCharacter;
         private BattleAction currentAction;
         private BattleSetup setup;
+
+        public event Action OnNewRound;
+        public event Action OnNewTurn;
+        public event Action<ActionType, Ability> OnNewAction;
 
         private void Awake()
         {
@@ -50,12 +55,13 @@ namespace UnfrozenTest
                 initiativeOrder.Enqueue(soldiers[randomIndex]);
                 soldiers.RemoveAt(randomIndex);
             }
+            OnNewRound?.Invoke();
             StartTurn();
         }
 
         void StartTurn()
         {
-            //check if one side is dead
+            //TODO: check if one side is dead
             if (!(currentAction is null))
             {
                 currentAction.Done -= StartTurn;
@@ -76,6 +82,7 @@ namespace UnfrozenTest
             //basic AI
             BasicAI();
             
+            OnNewTurn?.Invoke();
             //TODO display relevant UI with currentCharacter.Abilities
         }
 
@@ -110,6 +117,7 @@ namespace UnfrozenTest
                     currentAction = new OffenseBattleAction(currentCharacter, ability, this);
                     break;
             }
+            OnNewAction?.Invoke(type, ability);
             currentAction.Done += StartTurn;
             currentAction.Next();
         }

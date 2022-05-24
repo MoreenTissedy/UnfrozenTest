@@ -6,6 +6,7 @@ using Event = Spine.Event;
 
 namespace UnfrozenTest
 {
+    //TODO: healthbar
     [RequireComponent(typeof(SkeletonAnimation))]
     public class Character : MonoBehaviour
     {
