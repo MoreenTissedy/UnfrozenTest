@@ -13,11 +13,10 @@ namespace UnfrozenTest
         public GameObject[] allies;
         public GameObject[] enemies;
 
-        //TODO: remove debug
-        public List<Character> playerSquad, enemySquad;
+        private List<Character> playerSquad, enemySquad;
         private PositionManager positions;
         private Queue<Character> initiativeOrder;
-        public Character currentCharacter;
+        private Character currentCharacter;
         private BattleAction currentAction;
 
         private void Awake()

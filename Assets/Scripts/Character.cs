@@ -22,6 +22,9 @@ namespace UnfrozenTest
         private int currentHP;
         private bool dead = false;
         private bool playerSide;
+        private MeshRenderer rend;
+        public MeshRenderer Rend => rend;
+
 
         public bool PlayerSide => playerSide;
 
@@ -42,7 +45,8 @@ namespace UnfrozenTest
             this.position = position;
             this.gm = gm;
             currentHP = hp;
-            
+
+            rend = GetComponent<MeshRenderer>();
             spineAnim = GetComponent<SkeletonAnimation>();
             selector = GetComponentInChildren<CharacterSelector>();
             if (!(selector is null))
@@ -119,6 +123,7 @@ namespace UnfrozenTest
 
             return this;
         }
+
 
         private void AnimationStateOnEnd(TrackEntry entry)
         {
