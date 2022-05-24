@@ -266,9 +266,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spineAnim: {fileID: 8414985118380787251}
   animationSet: {fileID: 11400000, guid: 32c35198412aca45d96d1e1cbd6091f4, type: 2}
-  hp: 60
-  dr: 0
-  evasion: 0
-  abilities:
-  - {fileID: 11400000, guid: dd702fb22b9d3194d9dc79891d3e5e9c, type: 2}
   selector: {fileID: 9102803893124545318}
+  data: {fileID: 11400000, guid: 8210022afad574ac29d413f8f2d1ee60, type: 2}

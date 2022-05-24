@@ -26,7 +26,6 @@ namespace UnfrozenTest
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("click!");
             if (!selectable) return;
             image.enabled = false;
             character.Select();

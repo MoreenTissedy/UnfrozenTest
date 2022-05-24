@@ -23,7 +23,7 @@ namespace UnfrozenTest
 
         public override void Resolve()
         {
-            damageDone = Target.CalculateDamageTaken(ability);
+            damageDone = Target.Data.CalculateDamageTaken(ability, Target.CurrentHP);
             Cinematics.instance.Play(this);
             Cinematics.instance.Done += CinematicsDone;
         }

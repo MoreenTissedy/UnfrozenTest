@@ -5,7 +5,10 @@ using DG.Tweening;
 
 namespace UnfrozenTest
 {
-    public class Cinematics:MonoBehaviour
+    /// <summary>
+    /// This singleton class does all the cinematic effects on a battle action. 
+    /// </summary>
+    public class Cinematics: MonoBehaviour
     {
         public static Cinematics instance;
         public event Action Done;
@@ -34,6 +37,7 @@ namespace UnfrozenTest
         {
             currentAction = action;
             currentAttackCount = 0;
+            action.Actor.Highlight(false);
             //fade
             fadeScreen.enabled = true;
             //change sorting & enlarge actors, save previous parameters
@@ -59,7 +63,8 @@ namespace UnfrozenTest
         private void OnAnimationEnd()
         {
             currentAction.Actor.HitTime -= OnHitTime;
-            //change sorting & shrink actors
+            currentAction.Actor.AnimationDone -= OnAnimationEnd;
+            //change sorting & shrink actor back
             currentAction.Actor.Rend.sortingLayerName = prevSortingLayer;
             currentAction.Target.Rend.sortingLayerName = prevSortingLayer;
             currentAction.Actor.transform.DOScale(prevActorScale, growShrinkDuration);

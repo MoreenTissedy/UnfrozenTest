@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c06f029ed96411a8afd4a7ff7562b71, type: 3}
+  m_Name: Miner
+  m_EditorClassIdentifier: 
+  hp: 40
+  dr: 0
+  evasion: 0
+  abilities:
+  - {fileID: 11400000, guid: dd702fb22b9d3194d9dc79891d3e5e9c, type: 2}
+  - {fileID: 11400000, guid: c02032ee0c35a9a7890dffdb8c7b4c6c, type: 2}

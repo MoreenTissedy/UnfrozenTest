@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 
 namespace UnfrozenTest
 {
+    /// <summary>
+    /// UI button script
+    /// </summary>
     public class ActionButton : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private ActionType type;

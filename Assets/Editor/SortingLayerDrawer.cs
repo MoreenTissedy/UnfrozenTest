@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+//This is one of my common scripts, it displays a list of sorting layers in the inspector
 [CustomPropertyDrawer(typeof(SortingLayerProperty))]
 public class SortingLayerDrawer : PropertyDrawer
 {

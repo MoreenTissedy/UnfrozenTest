@@ -1,35 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace UnfrozenTest
 {
+    //This is a 'main' class that handles the game loop itself.
+    [RequireComponent(typeof(BattleSetup))]
     public class GameLoop : MonoBehaviour
     {
+        private PositionManager positions;
         [Tooltip("Parameters to calculate character positions")]
         public float centralGap = 10, gap = 10;
 
-        [Header("Battle squads (prefabs)")]
-        public GameObject[] allies;
-        public GameObject[] enemies;
-
         private List<Character> playerSquad, enemySquad;
-        private PositionManager positions;
         private Queue<Character> initiativeOrder;
         private Character currentCharacter;
         private BattleAction currentAction;
+        private BattleSetup setup;
 
         private void Awake()
         {
-            
+            setup = GetComponent<BattleSetup>();
             initiativeOrder = new Queue<Character>(PositionManager.squadLength * 2);
             //calculate battle positions
             positions = new PositionManager(centralGap, gap);
             
             //create squads, init character scripts and place characters accordingly
-            playerSquad = CreateSquad(allies, positions.Allies, true, "Player Squad");
-            enemySquad = CreateSquad(enemies, positions.Enemies, false, "Enemy Squad");
-            
+            playerSquad = setup.CreateSquad(positions.Allies, true, "Player Squad", this);
+            enemySquad = setup.CreateSquad(positions.Enemies, false, "Enemy Squad", this);
         }
 
         private void Start()
@@ -73,12 +72,33 @@ namespace UnfrozenTest
             } while (currentCharacter.Dead);
             //highlight current character for player
             currentCharacter.Highlight(true);
+            
+            //basic AI
+            BasicAI();
+            
             //TODO display relevant UI with currentCharacter.Abilities
+        }
+
+        private void BasicAI()
+        {
+            if (!currentCharacter.PlayerSide)
+            {
+                StartCoroutine(AITurn());
+            }
+        }
+
+        private IEnumerator AITurn()
+        {
+            //Hit the closest enemy with the first ability.
+            //Small delay for smoother gameplay and to avoid bugs.
+            yield return new WaitForSeconds(0.5f);
+            currentAction = new OffenseBattleAction(currentCharacter, currentCharacter.Data.Abilities[0], this);
+            currentAction.Done += StartTurn;
+            SelectTarget(playerSquad[0]);
         }
 
         public void SelectAction(ActionType type, Ability ability = null)
         {
-            Debug.Log(type);
             switch (type)
             {
                 case ActionType.Wait:
@@ -113,42 +133,7 @@ namespace UnfrozenTest
                 enemy.EnableSelection(on);
             }
         }
-
-        List<Character> CreateSquad(GameObject[] prefabs, Vector3[] battlePositions, bool playerSide = true, string squadName = "Squad")
-        {
-            Transform parent = new GameObject(squadName).transform;
-            List<Character> squad = new List<Character>(PositionManager.squadLength);
-            for (var index = 0; index < prefabs.Length; index++)
-            {
-                var prefab = prefabs[index];
-                if (prefab is null)
-                    continue;
-                GameObject soldier = Instantiate(prefab, battlePositions[index], Quaternion.identity);
-                soldier.transform.SetParent(parent);
-                if (!playerSide)
-                {
-                    //flipX enemies
-                    var localScale = soldier.transform.localScale;
-                    localScale = new Vector3(-localScale.x,
-                        localScale.y,
-                        localScale.z);
-                    soldier.transform.localScale = localScale;
-                }
-
-                Character script = soldier.GetComponent<Character>();
-                if (script is null)
-                {
-                    Debug.LogError($"No Character script on prefab {soldier.name}");
-                    continue;
-                }
-
-                script.Init(playerSide, index, this);
-                squad.Add(script);
-            }
-
-            return squad;
-        }
-
+        
         public void RemoveSoldier(Character character)
         {
             if (character.PlayerSide)

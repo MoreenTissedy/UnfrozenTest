@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace UnfrozenTest
 {
+    /// <summary>
+    /// Data for different types of attacks
+    /// </summary>
     [CreateAssetMenu(fileName = "New Ability", menuName = "Ability", order = 0)]
     public class Ability : ScriptableObject
     {
