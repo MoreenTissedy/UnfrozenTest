@@ -16,6 +16,8 @@ namespace UnfrozenTest
         private OffenseBattleAction currentAction;
         [SerializeField] private Image fadeScreen;
         [SerializeField][SortingLayerProperty] private string sortingLayer;
+        [SerializeField] private float cameraTargetZoom = 7f;
+        [SerializeField] private Canvas UI;
 
         [Header("Position parameters")] 
         [SerializeField] private float size = 8; 
@@ -24,6 +26,7 @@ namespace UnfrozenTest
 
         private string prevSortingLayer;
         private Vector3 prevActorScale, prevTargetScale, prevActorPos, prevTargetPos;
+        private float cameraInitialZoom;
         
 
         private void Awake()
@@ -54,6 +57,10 @@ namespace UnfrozenTest
                 : gap, growShrinkDuration);
             action.Target.transform.DOMoveX(action.Target.PlayerSide ? -gap
                 : gap, growShrinkDuration);
+            //zoom in with camera, hide UI
+            cameraInitialZoom = Camera.main.orthographicSize;
+            Camera.main.DOOrthoSize(cameraTargetZoom, growShrinkDuration);
+            UI.enabled = false;
             
             //start attack animation
             action.Actor.Animate(action.Ability.Animation).HitTime += OnHitTime;
@@ -71,6 +78,9 @@ namespace UnfrozenTest
             currentAction.Target.transform.DOScale(prevTargetScale, growShrinkDuration);
             currentAction.Actor.transform.DOMove(prevActorPos, growShrinkDuration);
             currentAction.Target.transform.DOMove(prevTargetPos, growShrinkDuration);
+            //zoom out
+            Camera.main.DOOrthoSize(cameraInitialZoom, growShrinkDuration);
+            UI.enabled = true;
             
             fadeScreen.enabled = false;
             Done?.Invoke();

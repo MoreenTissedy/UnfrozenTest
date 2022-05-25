@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,7 +13,9 @@ namespace UnfrozenTest
     {
         private PositionManager positions;
         [Tooltip("Parameters to calculate character positions")]
-        public float centralGap = 10, gap = 10;
+        [SerializeField] private float centralGap = 10, gap = 10;
+        [Tooltip("Camera movement step")]
+        [SerializeField] private float cameraMove = 1, cameraSpeed = 1f;
 
         private List<Character> playerSquad, enemySquad;
         private Queue<Character> initiativeOrder;
@@ -78,7 +81,9 @@ namespace UnfrozenTest
             } while (currentCharacter.Dead);
             //highlight current character for player
             currentCharacter.Highlight(true);
-            
+            //move camera to the side depending on the current character
+            int k = currentCharacter.PlayerSide ? -1 : 1;
+            Camera.main.transform.DOMoveX(k*cameraMove, cameraSpeed).SetEase(Ease.InOutCirc);
             //basic AI
             BasicAI();
             

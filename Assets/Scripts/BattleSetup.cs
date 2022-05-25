@@ -24,17 +24,12 @@ namespace UnfrozenTest
                 GameObject soldier = Instantiate(prefab, battlePositions[position], Quaternion.identity);
                 position++;
                 soldier.transform.SetParent(parent);
+               
+                Character script = soldier.GetComponent<Character>();
                 if (!playerSide)
                 {
-                    //flipX enemies
-                    var localScale = soldier.transform.localScale;
-                    localScale = new Vector3(-localScale.x,
-                        localScale.y,
-                        localScale.z);
-                    soldier.transform.localScale = localScale;
+                    script.FlipX();
                 }
-
-                Character script = soldier.GetComponent<Character>();
                 if (script is null)
                 {
                     Debug.LogError($"No Character script on prefab {soldier.name}");

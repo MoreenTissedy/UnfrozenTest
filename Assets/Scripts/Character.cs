@@ -6,14 +6,14 @@ using Event = Spine.Event;
 
 namespace UnfrozenTest
 {
-    //TODO: healthbar
-    [RequireComponent(typeof(SkeletonAnimation))]
     public class Character : MonoBehaviour
     {
         [SerializeField] private SkeletonAnimation spineAnim;
         [SerializeField] private AnimationSet animationSet;
         [SerializeField] private CharacterSelector selector;
         [SerializeField] private CharacterData data;
+        [SerializeField] private StatusBar healthBar;
+        [SerializeField] private MeshRenderer rend;
         public CharacterData Data => data;
 
         private int currentHP;
@@ -22,7 +22,6 @@ namespace UnfrozenTest
         private bool dead = false;
         private bool playerSide;
         public bool PlayerSide => playerSide;
-        private MeshRenderer rend;
         public MeshRenderer Rend => rend;
 
         private int position;
@@ -49,15 +48,29 @@ namespace UnfrozenTest
             this.gm = gm;
             currentHP = data.HP;
 
-            rend = GetComponent<MeshRenderer>();
-            spineAnim = GetComponent<SkeletonAnimation>();
-            selector = GetComponentInChildren<CharacterSelector>();
+            if (!healthBar) healthBar = GetComponentInChildren<StatusBar>();
+            healthBar?.InitStatus(data);
+            if (!rend) rend = GetComponentInChildren<MeshRenderer>();
+            if (!spineAnim) spineAnim = GetComponentInChildren<SkeletonAnimation>();
+            if (spineAnim is null)
+            {
+                Debug.LogError($"{gameObject.name} no Spine animation found in hierarchy!");
+            }
+            if (!selector) selector = GetComponentInChildren<CharacterSelector>();
             if (!(selector is null))
             {
                 selector.Image.enabled = false;
             }
         }
 
+        public void FlipX()
+        {
+            var localScale = spineAnim.gameObject.transform.localScale;
+            localScale = new Vector3(-localScale.x,
+                localScale.y,
+                localScale.z);
+            spineAnim.gameObject.transform.localScale = localScale;
+        }
         
         public void Highlight(bool on)
         {
@@ -118,6 +131,7 @@ namespace UnfrozenTest
             }
             Debug.Log($"{gameObject.name} took damage: {amount}");
             currentHP -= amount;
+            healthBar.UpdateHealth(currentHP);
             spineAnim.AnimationState.SetAnimation(1, 
                 animationSet.Get(AnimationSetItems.GetDamage), 
                 false);
