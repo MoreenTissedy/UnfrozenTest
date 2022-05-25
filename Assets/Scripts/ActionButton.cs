@@ -17,15 +17,10 @@ namespace UnfrozenTest
 
         private Image image;
 
-        private void OnValidate()
-        {
-            activeColor = GetComponent<Image>().color;
-            if (gameManager is null)
-                gameManager = FindObjectOfType<GameLoop>();
-        }
-
         private void Start()
         {
+            if (gameManager is null)
+                gameManager = FindObjectOfType<GameLoop>();
             image = GetComponent<Image>();
             gameManager.OnNewTurn += () => image.color = activeColor;
             gameManager.OnNewAction += GameManagerOnOnNewAction;
