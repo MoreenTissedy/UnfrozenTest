@@ -7,7 +7,7 @@ namespace UnfrozenTest
     {
         public override event Action Done;
 
-        public WaitBattleAction(Character actor, GameLoop gm) : base(actor, gm)
+        public WaitBattleAction(Character actor) : base(actor)
         {
         }
 

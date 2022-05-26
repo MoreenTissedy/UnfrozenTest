@@ -20,21 +20,22 @@ namespace UnfrozenTest
                 {
                     continue;
                 }
+                
                 GameObject soldier = Instantiate(prefab, battlePositions[position], Quaternion.identity);
-                position++;
                 soldier.transform.SetParent(parent);
-               
+
                 Character script = soldier.GetComponent<Character>();
+                if (script is null)
+                {
+                    Destroy(soldier);
+                    continue;
+                }
+
+                position++;
                 if (!playerSide)
                 {
                     script.FlipX();
                 }
-                if (script is null)
-                {
-                    Debug.LogError($"No Character script on prefab {soldier.name}");
-                    continue;
-                }
-
                 script.Init(playerSide, position, gm);
                 squad.Add(script);
             }

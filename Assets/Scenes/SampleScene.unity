@@ -583,6 +583,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: c02032ee0c35a9a7890dffdb8c7b4c6c,
         type: 2}
+    - target: {fileID: 1247318413123747068, guid: ec93e8f70181f76daa7d4f7469d79806,
+        type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1074184297}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec93e8f70181f76daa7d4f7469d79806, type: 3}
 --- !u!1001 &585885220
@@ -1046,7 +1051,7 @@ MonoBehaviour:
   gap: 6
   cameraMove: 3
   cameraSpeed: 1
-  winText: {fileID: 0}
+  winText: {fileID: 537561876}
 --- !u!4 &1074184298
 Transform:
   m_ObjectHideFlags: 0
@@ -1095,13 +1100,13 @@ MonoBehaviour:
   allies:
   - {fileID: 8414985118380787250, guid: 39451414b3ef2f9978acb338bd5093cb, type: 3}
   - {fileID: 3645425511257791153, guid: e5a9a43f1bb6ccc489c85c7886e6274d, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3645425511257791153, guid: e5a9a43f1bb6ccc489c85c7886e6274d, type: 3}
+  - {fileID: 8414985118380787250, guid: 39451414b3ef2f9978acb338bd5093cb, type: 3}
   enemies:
   - {fileID: 8414985118380787250, guid: 39451414b3ef2f9978acb338bd5093cb, type: 3}
   - {fileID: 8414985118380787250, guid: 39451414b3ef2f9978acb338bd5093cb, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3645425511257791153, guid: e5a9a43f1bb6ccc489c85c7886e6274d, type: 3}
+  - {fileID: 8414985118380787250, guid: 39451414b3ef2f9978acb338bd5093cb, type: 3}
 --- !u!224 &1093158014 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1247318413123746819, guid: ec93e8f70181f76daa7d4f7469d79806,
@@ -1741,5 +1746,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1247318413123747068, guid: ec93e8f70181f76daa7d4f7469d79806,
+        type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1074184297}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec93e8f70181f76daa7d4f7469d79806, type: 3}

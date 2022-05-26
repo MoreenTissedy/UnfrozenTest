@@ -16,7 +16,7 @@ namespace UnfrozenTest
         public int[] damageDone;
         protected int[] DamageDone => damageDone;
 
-        public OffenseBattleAction(Character actor, Ability ability, GameLoop gm) : base(actor, gm)
+        public OffenseBattleAction(Character actor, Ability ability) : base(actor)
         {
             this.ability = ability;
         }

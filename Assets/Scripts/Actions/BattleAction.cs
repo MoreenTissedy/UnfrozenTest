@@ -13,10 +13,10 @@ namespace UnfrozenTest
         public Character Actor => actor;
         public abstract event Action Done;
 
-        protected BattleAction(Character actor, GameLoop gm)
+        protected BattleAction(Character actor)
         {
             this.actor = actor;
-            this.gm = gm;
+            gm = GameLoop.instance;
         }
 
         //this method does the actual work and raises the Done event

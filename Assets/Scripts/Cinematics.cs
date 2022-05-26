@@ -32,7 +32,13 @@ namespace UnfrozenTest
         private void Awake()
         {
             if (instance is null)
+            {
                 instance = this;
+            }
+            else
+            {
+                Debug.LogWarning($"Double singleton on scene: {this.GetType()}");
+            }
             fadeScreen.enabled = false;
         }
 

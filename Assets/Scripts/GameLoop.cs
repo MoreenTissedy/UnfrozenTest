@@ -13,6 +13,8 @@ namespace UnfrozenTest
     [RequireComponent(typeof(BattleSetup))]
     public class GameLoop : MonoBehaviour
     {
+        public static GameLoop instance;
+        
         private PositionManager positions;
         [Tooltip("Parameters to calculate character positions")]
         [SerializeField] private float centralGap = 10, gap = 10;
@@ -32,6 +34,14 @@ namespace UnfrozenTest
 
         private void Awake()
         {
+            if (instance is null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Debug.LogWarning($"Double singleton on scene: {this.GetType()}");
+            }
             setup = GetComponent<BattleSetup>();
             initiativeOrder = new Queue<Character>(PositionManager.squadLength * 2);
             if (winText) winText.text = String.Empty;
@@ -126,7 +136,7 @@ namespace UnfrozenTest
             //Hit the closest enemy with the first ability.
             //Small delay for smoother gameplay and to avoid bugs.
             yield return new WaitForSeconds(0.5f);
-            currentAction = new OffenseBattleAction(currentCharacter, currentCharacter.Data.Abilities[0], this);
+            currentAction = new OffenseBattleAction(currentCharacter, currentCharacter.Data.Abilities[0]);
             currentAction.Done += StartTurn;
             SelectTarget(playerSquad[0]);
         }
@@ -136,12 +146,12 @@ namespace UnfrozenTest
             switch (type)
             {
                 case ActionType.Wait:
-                    currentAction = new WaitBattleAction(currentCharacter, this);
+                    currentAction = new WaitBattleAction(currentCharacter);
                     break;
                 case ActionType.Offense:
                     if (ability is null)
                         return;
-                    currentAction = new OffenseBattleAction(currentCharacter, ability, this);
+                    currentAction = new OffenseBattleAction(currentCharacter, ability);
                     break;
             }
             OnNewAction?.Invoke(type, ability);
