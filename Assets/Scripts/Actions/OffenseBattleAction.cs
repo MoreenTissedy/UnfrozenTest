@@ -30,7 +30,11 @@ namespace UnfrozenTest
 
         void CinematicsDone()
         {
-            Cinematics.instance.Done -= CinematicsDone; 
+            Cinematics.instance.Done -= CinematicsDone;
+            if (ability.NewAttackerPosition >= 0)
+            {
+                gm.Move(actor, ability.NewAttackerPosition);
+            }
             Done?.Invoke();
         }
 

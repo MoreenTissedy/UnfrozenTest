@@ -36,7 +36,7 @@ namespace UnfrozenTest
                 {
                     script.FlipX();
                 }
-                script.Init(playerSide, position, gm);
+                script.Init(playerSide, position);
                 squad.Add(script);
             }
 

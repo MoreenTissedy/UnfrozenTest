@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -58,6 +59,45 @@ namespace UnfrozenTest
             NewRound();    
         }
 
+        public void Move(Character target, int newPosition)
+        {
+            if (newPosition >= PositionManager.squadLength || newPosition < 0)
+            {
+                return;
+            }
+            if (target.PlayerSide)
+            {
+                if (!playerSquad.Contains(target))
+                {
+                    return;
+                }
+                playerSquad.Remove(target);
+                playerSquad.Insert(0, target);
+            }
+            else
+            {
+                if (!enemySquad.Contains(target))
+                {
+                    return;
+                }
+                enemySquad.Remove(target);
+                enemySquad.Insert(0, target);
+            }
+        }
+
+        private void UpdatePositions()
+        {
+            for (var i = 0; i < enemySquad.Count; i++)
+            {
+                enemySquad[i].Move(i, positions);
+            }
+
+            for (var i = 0; i < playerSquad.Count; i++)
+            {
+                playerSquad[i].Move(i, positions);
+            }
+        }
+
         void NewRound()
         {
             //form new initiative order
@@ -78,6 +118,7 @@ namespace UnfrozenTest
 
         void StartTurn()
         {
+            UpdatePositions();
             if (!(currentAction is null))
             {
                 currentAction.Done -= StartTurn;
@@ -87,15 +128,12 @@ namespace UnfrozenTest
             {
                 return;
             }
-            if (initiativeOrder.Where(x => !x.Dead).ToArray().Length == 0)
+            if (initiativeOrder.Count == 0)
             {
                 NewRound();
                 return;
             }
-            do
-            {
-                currentCharacter = initiativeOrder.Dequeue();
-            } while (currentCharacter.Dead);
+            currentCharacter = initiativeOrder.Dequeue();
             //highlight current character for player
             currentCharacter.Highlight(true);
             //move camera to the side depending on the current character
@@ -189,7 +227,11 @@ namespace UnfrozenTest
             {
                 enemySquad.Remove(character);
             }
-            
+
+            if (initiativeOrder.Contains(character))
+            {
+                initiativeOrder = new Queue<Character>(initiativeOrder.Where(x => x != character));
+            }
         }
     }
 }

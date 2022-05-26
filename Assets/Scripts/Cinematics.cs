@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -77,17 +78,26 @@ namespace UnfrozenTest
         {
             currentAction.Actor.HitTime -= OnHitTime;
             currentAction.Actor.AnimationDone -= OnAnimationEnd;
-            //change sorting & shrink actor back
-            currentAction.Actor.Rend.sortingLayerName = prevSortingLayer;
-            currentAction.Target.Rend.sortingLayerName = prevSortingLayer;
             currentAction.Actor.transform.DOScale(prevActorScale, growShrinkDuration);
-            currentAction.Target.transform.DOScale(prevTargetScale, growShrinkDuration);
             currentAction.Actor.transform.DOMove(prevActorPos, growShrinkDuration);
-            currentAction.Target.transform.DOMove(prevTargetPos, growShrinkDuration);
+            if (!currentAction.Target.Dead)
+            {
+                currentAction.Target.transform.DOScale(prevTargetScale, growShrinkDuration);
+                currentAction.Target.transform.DOMove(prevTargetPos, growShrinkDuration);
+            }
             //zoom out
             Camera.main.DOOrthoSize(cameraInitialZoom, growShrinkDuration);
-            UI.enabled = true;
+            StartCoroutine(CinematicsDone());
+        }
+
+        private IEnumerator CinematicsDone()
+        {
+            yield return new WaitForSeconds(growShrinkDuration);
+            //change sorting
+            currentAction.Actor.Rend.sortingLayerName = prevSortingLayer;
+            currentAction.Target.Rend.sortingLayerName = prevSortingLayer;
             
+            UI.enabled = true;
             fadeScreen.enabled = false;
             Done?.Invoke();
         }

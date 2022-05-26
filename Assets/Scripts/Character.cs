@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using Spine;
 using Spine.Unity;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace UnfrozenTest
 {
     public class Character : MonoBehaviour
     {
+        [Tooltip("Time taken to change position")]
+        [SerializeField] private float moveSpeed = 0.3f;
         [SerializeField][SpineEvent(dataField:"spineAnim", fallbackToTextField: true)] 
         private string hitEvent = "Hit";
         [SerializeField] [SpineSkin(dataField: "spineAnim", fallbackToTextField: true)]
@@ -30,7 +33,7 @@ namespace UnfrozenTest
 
         private int position;
         private GameLoop gm;
-        
+
         public event Action HitTime;
         public event Action AnimationDone;
 
@@ -39,8 +42,9 @@ namespace UnfrozenTest
             get => dead;
         }
 
-        public void Init(bool playerSide, int position, GameLoop gm)
+        public void Init(bool playerSide, int position)
         {
+            gm = GameLoop.instance;
             if (data is null)
             {
                 Debug.LogError($"Specify dataset for character {gameObject.name}");
@@ -49,7 +53,6 @@ namespace UnfrozenTest
             
             this.playerSide = playerSide;
             this.position = position;
-            this.gm = gm;
             currentHP = data.HP;
 
             if (!healthBar) healthBar = GetComponentInChildren<StatusBar>();
@@ -126,8 +129,24 @@ namespace UnfrozenTest
             }
         }
 
+        public void Move(int newPosition, PositionManager positions)
+        {
+            if (position == newPosition)
+            {
+                return;
+            }
+
+            Vector3 newVector = PlayerSide ? positions.Ally(newPosition) : positions.Enemy(newPosition);
+            position = newPosition;
+            transform.DOMove(newVector, moveSpeed);
+        }
+
         public void Damage(int amount)
         {
+            if (Dead)
+            {
+                return;
+            }
             if (amount == -1)
             {
                 Debug.Log("miss!");
@@ -152,8 +171,10 @@ namespace UnfrozenTest
             spineAnim.Skeleton.SetSkin(deathSkin);
             spineAnim.Skeleton.SetSlotsToSetupPose();
             spineAnim.AnimationState.Apply(spineAnim.skeleton);
-            //spineAnim.AnimationState.End += ctx => Destroy(gameObject);
+            //move off screen
+            spineAnim.AnimationState.End +=
+                ctx => transform.Translate(transform.right * (Camera.main.orthographicSize * 3));
         }
-        
+
     }
 }

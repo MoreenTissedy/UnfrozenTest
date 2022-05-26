@@ -15,17 +15,13 @@ namespace UnfrozenTest
         public Vector3[] Allies => allies;
 
         private Vector3[] enemies;
-        public Vector3[] Enemies
-        {
-            get => enemies;
-            set => enemies = value;
-        }
+        public Vector3[] Enemies => enemies;
 
         public PositionManager(float centralGap, float gap)
         {
             //cache character positions
             allies = new Vector3[squadLength];
-            Enemies = new Vector3[squadLength];
+            enemies = new Vector3[squadLength];
             Vector3 center = new Vector3(XCenter, YPosition, ZPosition);
             for (int i = 0; i < squadLength; i++)
             {
