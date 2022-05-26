@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UnfrozenTest
 {
@@ -40,12 +43,9 @@ namespace UnfrozenTest
                  }
                  damageTaken[i] = Mathf.Clamp(damageReceived - dr, 0, virtualHP);
              }
-             string log = "Calculated damage: ";
-             foreach (int dmg in damageTaken)
-             {
-                 log += $"{dmg}+";
-             }
-             Debug.Log(log.TrimEnd('+'));
+
+             string logDamage = String.Join("+", damageTaken.Select(x => x.ToString()));
+             Debug.Log($"Calculated damage: {logDamage}");
              return damageTaken;
          }
     }

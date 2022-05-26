@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace UnfrozenTest
@@ -16,6 +18,7 @@ namespace UnfrozenTest
         [SerializeField] private float centralGap = 10, gap = 10;
         [Tooltip("Camera movement step")]
         [SerializeField] private float cameraMove = 1, cameraSpeed = 1f;
+        [SerializeField] private Text winText;
 
         private List<Character> playerSquad, enemySquad;
         private Queue<Character> initiativeOrder;
@@ -31,6 +34,7 @@ namespace UnfrozenTest
         {
             setup = GetComponent<BattleSetup>();
             initiativeOrder = new Queue<Character>(PositionManager.squadLength * 2);
+            if (winText) winText.text = String.Empty;
             //calculate battle positions
             positions = new PositionManager(centralGap, gap);
             
@@ -64,13 +68,16 @@ namespace UnfrozenTest
 
         void StartTurn()
         {
-            //TODO: check if one side is dead
             if (!(currentAction is null))
             {
                 currentAction.Done -= StartTurn;
             }
             currentCharacter?.Highlight(false);
-            if (initiativeOrder.Count == 0)
+            if (WinCheck())
+            {
+                return;
+            }
+            if (initiativeOrder.Where(x => !x.Dead).ToArray().Length == 0)
             {
                 NewRound();
                 return;
@@ -89,6 +96,21 @@ namespace UnfrozenTest
             
             OnNewTurn?.Invoke();
             //TODO display relevant UI with currentCharacter.Abilities
+        }
+
+        private bool WinCheck()
+        {
+            if (enemySquad.Count == 0)
+            {
+                if (winText) {winText.text = "You win!";}
+                return true;
+            }
+            else if (playerSquad.Count == 0)
+            {
+                if (winText) {winText.text = "You lose";}
+                return true;
+            }
+            return false;
         }
 
         private void BasicAI()

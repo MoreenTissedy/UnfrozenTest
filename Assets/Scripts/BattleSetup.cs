@@ -14,9 +14,8 @@ namespace UnfrozenTest
             Transform parent = new GameObject(squadName).transform;
             List<Character> squad = new List<Character>(PositionManager.squadLength);
             int position = 0;
-            for (var index = 0; index < prefabs.Length; index++)
+            foreach (var prefab in prefabs)
             {
-                var prefab = prefabs[index];
                 if (!prefab)
                 {
                     continue;

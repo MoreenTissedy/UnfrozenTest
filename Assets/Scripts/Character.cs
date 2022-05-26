@@ -8,6 +8,10 @@ namespace UnfrozenTest
 {
     public class Character : MonoBehaviour
     {
+        [SerializeField][SpineEvent(dataField:"spineAnim", fallbackToTextField: true)] 
+        private string hitEvent = "Hit";
+        [SerializeField] [SpineSkin(dataField: "spineAnim", fallbackToTextField: true)]
+        private string deathSkin = "blood";
         [SerializeField] private SkeletonAnimation spineAnim;
         [SerializeField] private AnimationSet animationSet;
         [SerializeField] private CharacterSelector selector;
@@ -115,7 +119,7 @@ namespace UnfrozenTest
 
         private void AnimationStateOnEvent(TrackEntry trackentry, Event e)
         {
-            if (e.data.name == "Hit")
+            if (e.data.name == hitEvent)
             {
                 Debug.Log("Hit!");
                 HitTime?.Invoke();
@@ -145,7 +149,7 @@ namespace UnfrozenTest
             Debug.Log($"{gameObject.name} died!");
             dead = true;
             gm.RemoveSoldier(this);
-            spineAnim.Skeleton.SetSkin("blood");
+            spineAnim.Skeleton.SetSkin(deathSkin);
             spineAnim.Skeleton.SetSlotsToSetupPose();
             spineAnim.AnimationState.Apply(spineAnim.skeleton);
             //spineAnim.AnimationState.End += ctx => Destroy(gameObject);

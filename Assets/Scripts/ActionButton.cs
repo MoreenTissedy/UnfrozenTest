@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,10 +18,24 @@ namespace UnfrozenTest
 
         private Image image;
 
-        private void Start()
+        #if UNITY_EDITOR
+        private void OnValidate()
         {
             if (gameManager is null)
+            {
                 gameManager = FindObjectOfType<GameLoop>();
+                //I stumbled upon a problem where changes made to prefab instance fields
+                //from code were being overwritten by the prefab values. This is a solution.
+                if (PrefabUtility.IsPartOfPrefabInstance(this))
+                {
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+                }
+            }
+        }
+        #endif
+
+        private void Start()
+        {
             image = GetComponent<Image>();
             gameManager.OnNewTurn += () => image.color = activeColor;
             gameManager.OnNewAction += GameManagerOnOnNewAction;
@@ -28,9 +43,10 @@ namespace UnfrozenTest
 
         private void GameManagerOnOnNewAction(ActionType type, Ability ability)
         {
-            if (this.type == type && this.ability == ability)
-                return;
-            image.color = activeColor;
+            if (this.type != type || this.ability != ability)
+            {
+                image.color = activeColor;
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
